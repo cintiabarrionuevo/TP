@@ -13,6 +13,8 @@ public class MavenTP {
     public static ListaParticipantes PRODE;
     public static ListaPronosticos PRUEBA;
     public static ListaEquipos PRUEBA2;
+    public static ListaPartidos PRUEBA3;
+    public static PronosticoDeportivo PRODE1;
     
 
     public static void main(String[] args) {
@@ -20,12 +22,16 @@ public class MavenTP {
         System.out.println ("MOSTRAR LOS PRONOSTICOS Y QUIEN GANO");
         System.out.println ("Ejecutándose desde:"+System.getProperty("user.dir"));
         
-        PRODE = new ListaParticipantes();
-        PRODE.listarOrdenadosPorPuntaje();
-        PRODE.listar();
+      
         
-        PRUEBA2 = new ListaEquipos();
-        PRUEBA2.getEquipos();
+        PRODE = new ListaParticipantes();
+        PRODE.cargarDeBD();
+       /// PRODE.listarOrdenadosPorPuntaje();
+        ///PRODE.listar();
+        
+       
+       
+
         
         
         

@@ -4,6 +4,13 @@
  */
 package com.mycompany.maventp;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -154,4 +161,64 @@ public class ListaPartidos {
         }       
 
     }
+    
+    
+    // CARGAR DESDE LA BASE DE DATOS
+     
+    public void cargarDeBD (
+            ListaEquipos listaequipos,
+           
+            int golesEquipo1, //id del participante que realizo el pronostico
+            int golesEquipo2, // lista de queipos
+            int idPartido // lista de partidos
+    ){
+             Connection conn = null;
+        try {
+            // Establecer una conexión
+            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            // Crear el statement para enviar comandos
+            Statement stmt = conn.createStatement();
+
+            System.out.println("Consultando datos...");
+            String sql = "SELECT"
+                    + " idEquipo1, idEquipo2, golesEquipo1, golesEquipo2, idPartido"
+                    + " FROM partido"
+                    + " WHERE idPartido = " + idPartido;
+                    
+            ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
+            
+            while (rs.next()) {
+                //obtener los datos que necesito para el constructor
+                Equipo equipo1 = listaequipos.getEquipo(rs.getInt("idEquipo1"));
+                Equipo equipo2 = listaequipos.getEquipo(rs.getInt("idEquipo2"));
+                
+                //crea el objeto en memoria
+                Partido partido = new Partido(
+                        
+                        equipo1, // el equipo que obtuvimos de la lista
+                        equipo2,
+                        golesEquipo1,
+                        golesEquipo2,
+                        idPartido);
+                       
+                        
+                        
+                
+                this.addPartido(partido);
+            }
+            }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                // conn close failed.
+                System.out.println(e.getMessage());
+            }
+                }
+     
+    
+}
 }

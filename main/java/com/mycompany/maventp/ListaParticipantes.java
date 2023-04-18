@@ -12,6 +12,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
 public class ListaParticipantes {
     // atributo
     private List<Participante> participantes;
@@ -123,10 +131,10 @@ public class ListaParticipantes {
                 //convertir un string a un entero;
                 int idParticipante = Integer.parseInt(vectorParticipante[0]);
                 String nombre = vectorParticipante[1];
-                ListaPronosticos pronosticos = new ListaPronosticos();
+                
                 
                 // crea el objeto en memoria
-                participante = new Participante(nombre,pronosticos,idParticipante);
+                participante = new Participante(nombre,idParticipante);
                 
                 // llama al metodo add para grabar el equipo en la lista en memoria
                 this.addParticipante(participante);
@@ -148,7 +156,7 @@ public class ListaParticipantes {
         return ordenados;
     }
     public String listarOrdenadosPorPuntaje(){
-        System.out.println ("ENTRO");
+        System.out.println ("ENTRO  en listarOrdenadosPorPuntaje");
         List<Participante> ordenados = this.getOrdenadosPorPuntaje();
         String lista="";
         for(Participante participante : ordenados)
@@ -158,5 +166,62 @@ public class ListaParticipantes {
             return lista;
     
 }
+    
+    
+    // CARGAR DESDE LA BASE DE DATOS
+     
+    public void cargarDeBD (){
+         String nombre = "";
+         int idParticipante = 0 ;
+             
+    
+             Connection conn = null;
+        try {
+            // Establecer una conexión
+            System.out.println("Establecer una conexión");
+            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            // Crear el statement para enviar comandos
+            System.out.println(" DESPUES DE Establecer una conexión" + conn);
+            Statement stmt = conn.createStatement();
+
+            System.out.println("Consultando datos...");
+            String sql = "SELECT * FROM participantes";
+                   
+                    
+            ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
+            
+            while (rs.next()) {
+              
+                
+                //crea el objeto en memoria
+                Participante participante = new Participante(
+                        
+                        nombre, 
+                        idParticipante 
+                        );
+                       
+                        
+                        
+                
+                this.addParticipante(participante);
+            }
+            }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                // conn close failed.
+                System.out.println(e.getMessage());
+            }
+                }
+     
+    
 }
+}
+
+
+
 

@@ -4,6 +4,13 @@
  */
 package com.mycompany.maventp;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 
 import java.io.File;
@@ -13,11 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Connection;
+
 
 /**
  *
@@ -96,6 +99,8 @@ public class ListaPronosticos {
         }           
         return lista;
     }
+     
+    
     
         // cargar desde el archivo
     public void cargarDeArchivo(
@@ -224,6 +229,7 @@ public class ListaPronosticos {
         }
     }
      
+     // CARGAR DESDE LA BASE DE DATOS
      
     public void cargarDeBD (
             int idParticipante, //id del participante que realizo el pronostico

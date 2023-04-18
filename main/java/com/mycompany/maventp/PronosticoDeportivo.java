@@ -26,6 +26,8 @@ public class PronosticoDeportivo {
     public void play(){
         // cargar y listar los equipos
         equipos.cargarDeArchivo();
+       /// equipos.cargarDeBD('0', "BocaJuniors","Equipo1");
+       /// equipos.cargarDeBD(equipos.getEquipo(0), equipos.,"Equipo1");
         System.out.println("Los equipos cargados son: " + equipos.listar());
         
         partidos.cargarDeArchivo(equipos);

@@ -3,6 +3,15 @@ Clase ListaEquipos para la entrega 2
  */
 package com.mycompany.maventp;
 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -133,5 +142,63 @@ public class ListaEquipos {
         }       
 
     }
+    
+    
+    // CARGAR DESDE LA BASE DE DATOS
+     
+    public void cargarDeBD (
+            int idEquipo,
+            String nombre,
+            String descripcion)
+            
+           
+    {
+             Connection conn = null;
+        try {
+            // Establecer una conexión
+            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            // Crear el statement para enviar comandos
+            Statement stmt = conn.createStatement();
 
+            System.out.println("Consultando datos...");
+            String sql = "SELECT"
+                    + "*"
+                    + " FROM equipo";
+                    
+                    
+            ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
+            
+            while (rs.next()) {
+               
+                
+                //crea el objeto en memoria
+                Equipo equipo = new Equipo(
+                        
+                        idEquipo, 
+                        nombre, 
+                        descripcion
+                        );
+                       
+                        
+                        
+                
+                this.addEquipo(equipo);
+            }
+            }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                // conn close failed.
+                System.out.println(e.getMessage());
+            }
+                }
+     
+    
+    
+
+}
 }
