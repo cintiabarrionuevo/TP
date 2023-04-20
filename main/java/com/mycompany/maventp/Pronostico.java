@@ -61,10 +61,19 @@ public class Pronostico{
     public String toString() {
         return "Pronostico{" + "resultado=" + resultado + ", equipo=" + equipo + ", partido=" + partido + ", idPronostico=" + idPronostico + '}';
     }
+    
     public int puntos(){
            // devolver el punto segun G/P/E
-   
-           if(partido.getGolesEquipo1() < partido.getGolesEquipo2()){
+           int pa1 = 0;
+           int pa2 = 0;
+           
+          // pa1 = partido.getGolesEquipo1();
+          // pa2 = partido.getGolesEquipo2();
+                   
+           if(pa1 < pa2){
+              // System.out.println ("GolesEquipo1  " + pa1);
+             //  System.out.println ("GolesEquipo2  " + pa2);
+               
                if(equipo == partido.getEquipo2()){
                    if(resultado == 'G'){ return 1; 
                
@@ -72,7 +81,7 @@ public class Pronostico{
                
             }
            }
-               if(partido.getGolesEquipo1() > partido.getGolesEquipo2()){
+               if(pa1 > pa2){
                            if(equipo == partido.getEquipo1()){
                                  if(resultado == 'G'){return 1; }
                                  else{ return 0;   }            
@@ -85,7 +94,7 @@ public class Pronostico{
                     }
 
    
-                    
+    
            
     }
     

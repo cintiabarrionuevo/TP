@@ -93,6 +93,7 @@ public class ListaPartidos {
         String lista = "";
         for (Partido partido: partidos) {
             lista += "\n" + partido;
+           // System.out.println ("ENTRO al for " + partido);
         }           
         return lista;
     }
@@ -166,44 +167,49 @@ public class ListaPartidos {
     // CARGAR DESDE LA BASE DE DATOS
      
     public void cargarDeBD (
-            ListaEquipos listaequipos,
-           
-            int golesEquipo1, //id del participante que realizo el pronostico
+            ListaEquipos listaequipos)
+           /*
+            ,int golesEquipo1, //id del participante que realizo el pronostico
             int golesEquipo2, // lista de queipos
             int idPartido // lista de partidos
-    ){
+    )*/
+{
              Connection conn = null;
         try {
             // Establecer una conexión
-            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            System.out.println("Establecer una conexión");
+            conn = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
             // Crear el statement para enviar comandos
             Statement stmt = conn.createStatement();
 
             System.out.println("Consultando datos...");
             String sql = "SELECT"
                     + " idEquipo1, idEquipo2, golesEquipo1, golesEquipo2, idPartido"
-                    + " FROM partido"
-                    + " WHERE idPartido = " + idPartido;
-                    
+                    + " FROM partidos";
+          
+                   
+            //System.out.println("DESPUES DEL SELECT");       
             ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
             
+          //  System.out.println("ANTES DEL WHILE"); 
             while (rs.next()) {
                 //obtener los datos que necesito para el constructor
                 Equipo equipo1 = listaequipos.getEquipo(rs.getInt("idEquipo1"));
                 Equipo equipo2 = listaequipos.getEquipo(rs.getInt("idEquipo2"));
                 
                 //crea el objeto en memoria
+              //  System.out.println("ANTES DEL CONSTRUCTOR"); 
                 Partido partido = new Partido(
                         
                         equipo1, // el equipo que obtuvimos de la lista
                         equipo2,
-                        golesEquipo1,
-                        golesEquipo2,
-                        idPartido);
+                        rs.getInt("golesEquipo1"),
+                        rs.getInt("golesEquipo2"),
+                        rs.getInt("idPartido"));
                        
                         
                         
-                
+                //System.out.println("DESPUES  DEL CONSTRUCTOR"); 
                 this.addPartido(partido);
             }
             }catch (SQLException e) {
@@ -219,6 +225,6 @@ public class ListaPartidos {
             }
                 }
      
-    
+    System.out.println("finalizo ok ListaPartidos" );
 }
 }

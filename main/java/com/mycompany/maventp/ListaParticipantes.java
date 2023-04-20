@@ -69,6 +69,7 @@ public class ListaParticipantes {
         // Inicialmente es null, ya que no he encontrado el equipo que 
         // buscaba todavía.
         Participante encontrado = null;
+        //String resultado= "nada";
         // Recorro la lista de participantes que está cargada
         for (Participante eq : this.getParticipantes()) {
             // Para cada equipo obtengo el valor del ID y lo comparo con el que
@@ -76,6 +77,7 @@ public class ListaParticipantes {
             if (eq.getIdParticipante() == idParticipante) {
                 // Si lo encuentro (son iguales) lo asigno como valor de encontrado
                 encontrado = eq;
+              //  resultado= "ok";
                 // Y hago un break para salir del ciclo ya que no hace falta seguir buscando
                 break;
             }
@@ -95,6 +97,7 @@ public class ListaParticipantes {
         String lista = "";
         for (Participante participante: participantes) {
             lista += "\n" + participante;
+          //   System.out.println ("ENTRO al for " + participante);
         }           
         return lista;
     }
@@ -131,10 +134,12 @@ public class ListaParticipantes {
                 //convertir un string a un entero;
                 int idParticipante = Integer.parseInt(vectorParticipante[0]);
                 String nombre = vectorParticipante[1];
+                ListaPronosticos pronosticos = new ListaPronosticos();
                 
                 
                 // crea el objeto en memoria
-                participante = new Participante(nombre,idParticipante);
+                participante = new Participante(nombre,pronosticos, idParticipante);
+                System.out.println ("ENTRO " + participante);
                 
                 // llama al metodo add para grabar el equipo en la lista en memoria
                 this.addParticipante(participante);
@@ -144,6 +149,8 @@ public class ListaParticipantes {
                 System.out.println("Mensaje: " + ex.getMessage());
         }       
     }
+    
+    
     //ordenar por puntaje
     //mostrar la lista
     public List<Participante> getOrdenadosPorPuntaje(){
@@ -156,36 +163,47 @@ public class ListaParticipantes {
         return ordenados;
     }
     public String listarOrdenadosPorPuntaje(){
-        System.out.println ("ENTRO  en listarOrdenadosPorPuntaje");
+      //  System.out.println ("ENTRO  en listarOrdenadosPorPuntaje");
+        
         List<Participante> ordenados = this.getOrdenadosPorPuntaje();
         String lista="";
+        //System.out.println("\n  Nombre del Participante Puntaje del Participante \n");
         for(Participante participante : ordenados)
         {
+           // System.out.println("DATOS DEL FOR EN ORDENADOS " + ordenados);
             lista += "\n" + participante.getNombre() + " " + participante.getPuntaje();
+           
+            System.out.println("\n" + participante.getNombre() + " " + participante.getPuntaje()+ "\n");
               }
             return lista;
     
 }
     
     
-    // CARGAR DESDE LA BASE DE DATOS
+    // CARGAR DESDE LA BASE DE DATOS 
+    
+    
      
-    public void cargarDeBD (){
-         String nombre = "";
-         int idParticipante = 0 ;
-             
+    public void cargarDeBD ()
+         /*String nombre,
+         int idParticipante 
+          )*/
+    {   
     
              Connection conn = null;
         try {
             // Establecer una conexión
             System.out.println("Establecer una conexión");
-            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
             // Crear el statement para enviar comandos
-            System.out.println(" DESPUES DE Establecer una conexión" + conn);
+           // System.out.println(" DESPUES DE Establecer una conexión" + conn);
             Statement stmt = conn.createStatement();
 
-            System.out.println("Consultando datos...");
-            String sql = "SELECT * FROM participantes";
+            System.out.println("Consultando datos DE PARTICIPANTES...");
+            String sql = "SELECT"
+                    + " Nombre, idParticipante"
+                    + " FROM participantes";
+           
                    
                     
             ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
@@ -193,17 +211,20 @@ public class ListaParticipantes {
             while (rs.next()) {
               
                 
-                //crea el objeto en memoria
+                //crea el objeto en memoria 
+                ListaPronosticos milista =  new ListaPronosticos();
                 Participante participante = new Participante(
                         
-                        nombre, 
-                        idParticipante 
+                        rs.getString("Nombre"), 
+                        milista,
+                        rs.getInt("idParticipante") 
                         );
                        
                         
                         
                 
                 this.addParticipante(participante);
+               // System.out.println("se cargo " + participante);
             }
             }catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -218,9 +239,11 @@ public class ListaParticipantes {
             }
                 }
      
-    
+     System.out.println("finalizo ok ListaParticipantes" );
 }
-}
+  
+    }
+
 
 
 

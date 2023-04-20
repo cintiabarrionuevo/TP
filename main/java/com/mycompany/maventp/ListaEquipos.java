@@ -93,6 +93,7 @@ public class ListaEquipos {
         String lista = "";
         for (Equipo equipo: equipos) {
             lista += "\n" + equipo;
+            //System.out.println ("ENTRO al for " + equipo);
         }           
         return lista;
     }
@@ -146,43 +147,46 @@ public class ListaEquipos {
     
     // CARGAR DESDE LA BASE DE DATOS
      
-    public void cargarDeBD (
-            int idEquipo,
+    public void cargarDeBD ()
+           /* int idEquipo,
             String nombre,
-            String descripcion)
+            String descripcion)*/
             
            
     {
              Connection conn = null;
         try {
             // Establecer una conexión
-            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
             // Crear el statement para enviar comandos
             Statement stmt = conn.createStatement();
 
             System.out.println("Consultando datos...");
             String sql = "SELECT"
-                    + "*"
-                    + " FROM equipo";
+                    + " idEquipo, Nombre, Descripcion"
+                    + " FROM equipos";
                     
-                    
+            //System.out.println("termino el select");        
             ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
             
+           // System.out.println("antes del while");  
             while (rs.next()) {
                
                 
                 //crea el objeto en memoria
                 Equipo equipo = new Equipo(
                         
-                        idEquipo, 
-                        nombre, 
-                        descripcion
+                        rs.getInt("idEquipo"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion")
+                        
                         );
                        
                         
                         
-                
+               // System.out.println("despues del constructor");  
                 this.addEquipo(equipo);
+              //  System.out.println("despues del addEquipo");  
             }
             }catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -197,7 +201,7 @@ public class ListaEquipos {
             }
                 }
      
-    
+    System.out.println("finalizo ok ListaEquipos" );
     
 
 }

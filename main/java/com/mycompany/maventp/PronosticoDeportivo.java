@@ -6,6 +6,14 @@ package com.mycompany.maventp;
 
 import java.util.Random;
 import java.util.Scanner;
+import de.vandermeer.asciitable.AsciiTable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
 /**
  *
  * 
@@ -24,24 +32,29 @@ public class PronosticoDeportivo {
     }
 
     public void play(){
+        
         // cargar y listar los equipos
-        equipos.cargarDeArchivo();
-       /// equipos.cargarDeBD('0', "BocaJuniors","Equipo1");
-       /// equipos.cargarDeBD(equipos.getEquipo(0), equipos.,"Equipo1");
+        equipos.cargarDeBD();
+    
         System.out.println("Los equipos cargados son: " + equipos.listar());
         
-        partidos.cargarDeArchivo(equipos);
-        System.out.println("Los partidos cargados son: " + partidos.listar());
+        partidos.cargarDeBD(equipos);
+        
+       System.out.println("Los partidos cargados son: " + partidos.listar());
 
-        participantes.cargarDeArchivo();
+       participantes.cargarDeBD();
         // Una vez cargados los participantes, para cada uno de ellos
         // cargar sus pronósticos
         for (Participante p : participantes.getParticipantes()) {
             p.cargarPronosticos(equipos, partidos);
         }
         
-        System.out.println("Los participantes cargados son: " + participantes.listar());
+      //mostrar listado de participante ordenado por puntaje
+     System.out.println ("MOSTRAR QUIEN GANO Y SU PUNTAJE ");
+     participantes.listarOrdenadosPorPuntaje();
         
+        
+
         // agregar y/o modificar el codigo que quieran
         System.out.println("Ingrese el ID  de un equipo para buscar: ");
         Scanner sc = new Scanner(System.in);
@@ -55,7 +68,7 @@ public class PronosticoDeportivo {
             System.out.println("NO SE ENCONTRO EL EQUIPO : " + n);
         }
         
-        //mostrar listado de participante ordenado por puntaje
+        
         /// mostrar el aprticipante que gano
         
         

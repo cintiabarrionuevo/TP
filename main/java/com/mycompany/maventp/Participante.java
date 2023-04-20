@@ -4,20 +4,24 @@
  */
 package com.mycompany.maventp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Participante implements Comparable<Participante> {
     
     private String nombre;
-  // private ListaPronosticos pronosticos;
+    private ListaPronosticos pronosticos;
     private int idParticipante;
 
-    public Participante(String nombre,/* ListaPronosticos pronosticos, */int idParticipante) {
+    public Participante(String nombre, ListaPronosticos pronosticos, int idParticipante) {
         this.nombre = nombre;
-       // this.pronosticos = new ListaPronosticos();
+        this.pronosticos = new ListaPronosticos();
         this.idParticipante = idParticipante;
     }
  public Participante() {
         this.nombre = "";
-      //  this.pronosticos = new ListaPronosticos();
+        this.pronosticos = new ListaPronosticos();
         this.idParticipante = 0;
     }
 
@@ -29,13 +33,13 @@ public class Participante implements Comparable<Participante> {
         this.nombre = nombre;
     }
 
-  /*  public ListaPronosticos getPronosticos() {
+    public ListaPronosticos getPronosticos() {
         return pronosticos;
     }
 
     public void setPronosticos(ListaPronosticos pronosticos) {
         this.pronosticos = pronosticos;
-    }*/
+    }
 
     public int getIdParticipante() {
         return idParticipante;
@@ -47,10 +51,34 @@ public class Participante implements Comparable<Participante> {
 
     @Override
     public String toString() {
-        return "Participante{" + "nombre=" + nombre + ", idParticipante=" + idParticipante + '}';
+        return "Participante{" + "nombre=" + nombre + ", pronosticos=" + pronosticos + ", idParticipante=" + idParticipante + '}';
+    }
+
+    
+    
+    public int getPuntaje() {
+          // Para ver el puntaje debo recorrer los pronosticos y ver el puntaje
+        // de cada uno y acumularlo. Debo devolver el total.
+        int puntaje = 0;
+        
+        // el primer mensaje corresponde al atributo pronosticos de parrticipante
+        // el segundo mensaje corresponde a la lista que tiene el atributo pronosticos
+        // de esa lista se obtiene cada pronostico y se saca el puntaje acumulandolo en 
+        // la variable puntaje
+        for (Pronostico p : this.getPronosticos().getPronosticos()) {
+            
+            puntaje += p.puntos();
+          /*  int prono =p.getIdPronostico(); // para saber el idpronostico
+            System.out.println ("el puntaje es  " + prono);*/
+            
+        }
+       // System.out.println ("el puntaje es  " + puntaje);
+        
+        
+        return puntaje;
     }
    
-
+/* sin la lista
    public int getPuntaje() {
           // Para ver el puntaje debo recorrer los pronosticos y ver el puntaje
         // de cada uno y acumularlo. Debo devolver el total.
@@ -68,10 +96,18 @@ public class Participante implements Comparable<Participante> {
 }
     
     
-      void cargarPronosticos (ListaEquipos equipos, ListaPartidos partidos) {
+     void cargarPronosticos (ListaEquipos equipos, ListaPartidos partidos) {
         
         ListaPronosticos lista = new ListaPronosticos();
         lista.cargarDeArchivo(this.getIdParticipante(), equipos, partidos);
+    }*/ //sin la lista
+     
+   void cargarPronosticos (ListaEquipos equipos, ListaPartidos partidos) {
+        
+       // this.pronosticos.cargarDeArchivo(this.getIdParticipante(), equipos, partidos);
+        this.pronosticos.cargarDeBD(this.idParticipante, equipos, partidos);
+        
+      // System.out.println("Mensaje: " + pronosticos);
     }
       
     
@@ -88,8 +124,9 @@ public class Participante implements Comparable<Participante> {
                   return 1;
                   else 
                   return -1;
-      }         
-   
+      }      
+      
+       
 }
               
       

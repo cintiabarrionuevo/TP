@@ -96,6 +96,7 @@ public class ListaPronosticos {
         String lista = "";
         for (Pronostico pronostico: pronosticos) {
             lista += "\n" + pronostico;
+           // System.out.println ("ENTRO al for " + pronosticos);
         }           
         return lista;
     }
@@ -239,22 +240,40 @@ public class ListaPronosticos {
              Connection conn = null;
         try {
             // Establecer una conexión
-            conn = DriverManager.getConnection("jdbc:sqlite:pronostico.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
             // Crear el statement para enviar comandos
             Statement stmt = conn.createStatement();
-
-            System.out.println("Consultando datos...");
+             
+            System.out.println("Consultando datos DE CADA PRONOSTICOS...");
             String sql = "SELECT"
                     + " idPronostico, idParticipante, idPartido, idEquipo, resultado"
                     + " FROM pronosticos"
                     + " WHERE idParticipante = " + idParticipante;
                     
             ResultSet rs = stmt.executeQuery(sql); // ejecutar la consulta y obtener el resulset
+           // System.out.println("ANTES DEL WHILE");
+           // System.out.println("SQL" + sql);
+            
+            /* // para saber que envia YO
+                System.out.println("datos para el constructor");
+               // System.out.println(equipo);
+               // System.out.println(partido);
+                System.out.println(rs.getString("resultado"));
+                System.out.println(rs.getString("idPronostico"));*/
+            
             
             while (rs.next()) {
+              //  System.out.println("ENTRA AL WHILE");
                 //obtener los datos que necesito para el constructor
                 Partido partido = listapartidos.getPartido(rs.getInt("idPartido"));
                 Equipo equipo = listaequipos.getEquipo(rs.getInt("idEquipo"));
+                
+               /* // para saber que envia YO
+                System.out.println("datos para el constructor");
+                System.out.println(equipo);
+                System.out.println(partido);
+                System.out.println(rs.getString("resultado"));
+                System.out.println(rs.getString("idPronostico"));*/
                 
                 //crea el objeto en memoria
                 Pronostico pronostico = new Pronostico(
@@ -262,13 +281,14 @@ public class ListaPronosticos {
                         equipo, // el equipo que obtuvimos de la lista
                         partido, // el partido que obtuvimos de la lista
                         //el primer caracter es una comilla delimitadora de campo
-                        rs.getString("resultado").charAt(1),// el resultado que leimos de la tabla
+                    rs.getString("resultado").charAt(0),// el resultado que leimos de la tabla
                         rs.getInt("idPronostico"));//el id leido de la tabla)
                        
                         
                         
-                
+                 
                 this.addPronostico(pronostico);
+                
             }
             }catch (SQLException e) {
             System.out.println(e.getMessage());
